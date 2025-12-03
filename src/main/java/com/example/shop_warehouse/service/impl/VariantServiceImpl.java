@@ -8,19 +8,20 @@ import com.example.shop_warehouse.exception.NotFoundException;
 import com.example.shop_warehouse.repository.ItemRepository;
 import com.example.shop_warehouse.repository.ItemVariantRepository;
 import com.example.shop_warehouse.service.VariantService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class VariantServiceImpl implements VariantService {
     private final ItemVariantRepository variantRepository;
     private final ItemRepository itemRepository;
 
+    @Transactional(readOnly = false)
     public VariantResponse create(Long itemId, VariantRequest request) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Item not found with id " + itemId));
@@ -46,6 +47,7 @@ public class VariantServiceImpl implements VariantService {
         return toResponse(variant);
     }
 
+    @Transactional(readOnly = false)
     public VariantResponse update(Long id, VariantRequest request) {
         ItemVariant variant = variantRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Variant not found with id " + id));
@@ -54,6 +56,7 @@ public class VariantServiceImpl implements VariantService {
         return toResponse(variant);
     }
 
+    @Transactional(readOnly = false)
     public void delete(Long id) {
         if (!variantRepository.existsById(id)) {
             throw new NotFoundException("Variant not found with id " + id);

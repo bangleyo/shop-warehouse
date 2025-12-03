@@ -8,9 +8,9 @@ import com.example.shop_warehouse.exception.NotFoundException;
 import com.example.shop_warehouse.repository.ItemRepository;
 import com.example.shop_warehouse.repository.ItemVariantRepository;
 import com.example.shop_warehouse.service.InventoryService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -41,7 +41,7 @@ public class InventoryServiceImpl implements InventoryService {
             throw new IllegalArgumentException("Item with variants must be sold by variantId");
         }
 
-        int currentStock = item.getStockQuantity() != null ? item.getStockQuantity() : 0;
+        int currentStock = item.getStockQuantity();
         if (currentStock < quantity) {
             throw new InsufficientStockException("Not enough stock for item " + itemId);
         }

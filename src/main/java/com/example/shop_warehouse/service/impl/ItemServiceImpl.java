@@ -8,20 +8,21 @@ import com.example.shop_warehouse.entity.ItemVariant;
 import com.example.shop_warehouse.exception.NotFoundException;
 import com.example.shop_warehouse.repository.ItemRepository;
 import com.example.shop_warehouse.service.ItemService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
 
+    @Transactional(readOnly = false)
     public ItemResponse create(ItemRequest request) {
         Item item = new Item();
         mapRequestToEntity(request, item);
@@ -39,6 +40,7 @@ public class ItemServiceImpl implements ItemService {
         return toResponse(item);
     }
 
+    @Transactional(readOnly = false)
     public ItemResponse update(Long id, ItemRequest request) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Item not found with id " + id));
@@ -47,6 +49,7 @@ public class ItemServiceImpl implements ItemService {
         return toResponse(item);
     }
 
+    @Transactional(readOnly = false)
     public void delete(Long id) {
         if (!itemRepository.existsById(id)) {
             throw new NotFoundException("Item not found with id " + id);
