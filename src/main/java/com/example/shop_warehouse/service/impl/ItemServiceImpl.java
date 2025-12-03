@@ -8,6 +8,8 @@ import com.example.shop_warehouse.entity.ItemVariant;
 import com.example.shop_warehouse.exception.NotFoundException;
 import com.example.shop_warehouse.repository.ItemRepository;
 import com.example.shop_warehouse.service.ItemService;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,12 +17,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
-
-    public ItemServiceImpl(ItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
-    }
 
     public ItemResponse create(ItemRequest request) {
         Item item = new Item();

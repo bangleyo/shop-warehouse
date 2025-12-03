@@ -8,12 +8,14 @@ import com.example.shop_warehouse.exception.NotFoundException;
 import com.example.shop_warehouse.repository.ItemRepository;
 import com.example.shop_warehouse.repository.ItemVariantRepository;
 import com.example.shop_warehouse.service.InventoryService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
 
